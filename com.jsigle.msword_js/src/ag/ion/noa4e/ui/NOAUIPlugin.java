@@ -232,35 +232,29 @@ public class NOAUIPlugin extends AbstractUIPlugin {
 	  
 	  System.out.println("NOAUIPlugin: startLocalOfficeApplication(): returned from trying to start.");
 	  if (status==null)	System.out.println("NOAUIPlugin: startLocalOfficeApplication(): status==null");
-	  else				System.out.println("NOAUIPlugin: startLocalOfficeApplication(): status="+status.toString());
+	  else	{
+		  System.out.println("NOAUIPlugin: startLocalOfficeApplication(): status="+status.toString());
 		
-	  if (status.getSeverity() == IStatus.ERROR) {  
-    	System.out.println("NOAUIPlugin: startLocalOfficeApplication(): WARNING: status.getSeverity()==IStatus.ERROR");
+		  if (status.getSeverity() == IStatus.ERROR) {  
+			  System.out.println("NOAUIPlugin: startLocalOfficeApplication(): WARNING: status.getSeverity()==IStatus.ERROR");
   		
-        if (MessageDialog.openQuestion(shell,
-            Messages.NOAUIPlugin_dialog_change_preferences_title,
-            Messages.NOAUIPlugin_dialog_change_preferences_message)) {
-          PreferenceDialog preferenceDialog = PreferencesUtil.createPreferenceDialogOn(shell,
-              LocalOfficeApplicationPreferencesPage.PAGE_ID,
-              null,
-              null);
-          if (preferenceDialog.open() == Window.CANCEL)
-            return Status.CANCEL_STATUS;
-          else
-            continue;
-        }
-      }
-	  else System.out.println("NOAUIPlugin: startLocalOfficeApplication(): SUCCESS: !status.getSeverity()==IStatus.ERROR"); 
+			  if (MessageDialog.openQuestion(shell,
+					  Messages.NOAUIPlugin_dialog_change_preferences_title,
+					  Messages.NOAUIPlugin_dialog_change_preferences_message)) {
+				  PreferenceDialog preferenceDialog = PreferencesUtil.createPreferenceDialogOn(shell,
+						  LocalOfficeApplicationPreferencesPage.PAGE_ID,
+						  null,
+						  null);
+				  if (preferenceDialog.open() == Window.CANCEL)
+					  return Status.CANCEL_STATUS;
+				  else continue;
+			  }
+		  }
+		  else System.out.println("NOAUIPlugin: startLocalOfficeApplication(): SUCCESS: !status.getSeverity()==IStatus.ERROR");
+	  }
 	  
 	  
-      try {
-    	 
-
-    	  
-    	  
-    	  
-    	  
-    	  
+      try {    	  
     	    //My warning in the following line referred to the original noa4e code:
     	    //System.out.println("NOAUIPlugin: internalStartApplication(): getting officeHome (WARNING: probably from the wrong source)...");
     	    System.out.println("NOAUIPlugin: internalStartApplication(): getting officeHome...");

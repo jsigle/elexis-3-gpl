@@ -3541,7 +3541,8 @@ END OF TESTCODE FOR INSERTING TEXTFRAME SHAPES*/
 		//It still flickers, because we have about 6 calls through findOrReplace() from Elexis.
 		//So... we evaluate the patterns supplied from Elexis to decide whether we shall set Word to invisible or not :-)
 		//This is the 1st pattern that Elexis sends, so we're at the beginning of the 1st pass through findOrReplace and switch Word back to invisible :-)
-		if (pattern.equals("\\[[*]?[-a-zA-ZäöüÄÖÜéàè_ ]+\\.[-a-zA-Z0-9äöüÄÖÜéàè_ ]+\\]")) {
+		if (pattern == null) System.out.println("MSWord_jsText: findOrReplace: ERROR: pattern IS NULL!)");
+		else if (pattern.equals("\\[[*]?[-a-zA-ZäöüÄÖÜéàè_ ]+\\.[-a-zA-Z0-9äöüÄÖÜéàè_ ]+\\]")) {
 			//ToDo: Allenfalls wieder einschalten, wenn danach das MSWord Dokumentenwindow wieder nach vorne geholt werden kann: //20170201js commented out
 			System.out.println("MSWord_jsText: findOrReplace: FOLGENDER CODE COMMENTED OUT, DA WORD DABEI LEICHT NACH HINTEN RUTSCHT:");		
 			System.out.println("MSWord_jsText: findOrReplace: BITTE ERST DANN WIEDER EINFUEGEN, WENN WORD ANSCHLIESSEND NACH VORNE GEHOLT WERDEN KANN.");		
@@ -3562,6 +3563,13 @@ END OF TESTCODE FOR INSERTING TEXTFRAME SHAPES*/
 		//je nach Ländereinstellung; aber beides lässt Word leider nicht zu. Ein {1} etc. geht übrigens, nur der Bereich geht nicht. Auch {;1} geht nicht.
 		//Ebenso wird ^ unten im 3. bis 6. Pattern durch ? ersetzt...
 		
+		pattern2 = pattern;
+		if (pattern == null) {
+			System.out.println("MSWord_jsText: findOrReplace: ERROR: pattern IS NULL!)");
+			System.out.println("MSWord_jsText: findOrReplace: ERROR: consequentially, pattern2 IS NULL, too!)");
+		}
+		else 
+		{
 		//OO:	\[[*]?[-a-zA-ZäöüÄÖÜéàè_ ]+\.[-a-zA-Z0-9äöüÄÖÜéàè_ ]+\]
 		//Word:	\[?[\-a-zA-ZäöüÄÖÜéàè_ ]@.[\-a-zA-Z0-9äöüÄÖÜéàè_ ]@\]		//[\*]{0,1} oder [\*]{0;1} wäre korrekt für [*]? wird aber nicht akzeptiert.
 		if (pattern.equals("\\[[*]?[-a-zA-ZäöüÄÖÜéàè_ ]+\\.[-a-zA-Z0-9äöüÄÖÜéàè_ ]+\\]"))
@@ -3593,7 +3601,7 @@ END OF TESTCODE FOR INSERTING TEXTFRAME SHAPES*/
 			pattern2 = "\\[SCRIPT:[?\\[]@\\]";	 
 		else
 		pattern2 = pattern;
-		
+		}
 				
 
 		if (debugSysPrnFindOrReplaceDetails) 
@@ -4084,7 +4092,9 @@ End Sub
 						//ToDo: This is an adhoc workaround to protect Tarmedrechnung_xx templates so that their header lines are NOT made appear.
 						//ToDo:   We should rather find out how Word can completely do away with an empty header line again,
 						//ToDo:   after that has been displayed by accessing ...Section.Header.Range (below in the SectionHeaders portion of findOrReplace).
-						if (pattern.equals("\\[Titel\\]")) { ProbablyUsingTarmed_xxTemplateSoDoNOTAccessHeaderRangeToAvoidGenerationOfEmptyHeaderLines = true; }
+						
+        				if (pattern == null)	System.out.println("MSWord_jsText: findOrReplace: WARNING: pattern IS NULL!");
+        				else if (pattern.equals("\\[Titel\\]")) { ProbablyUsingTarmed_xxTemplateSoDoNOTAccessHeaderRangeToAvoidGenerationOfEmptyHeaderLines = true; }
 						
 						
 						
@@ -5799,7 +5809,8 @@ System.out.println("MSWord_jsText: findOrReplace (SectionHeaders): *** ENDE DES 
 		//It still flickers, because we have about 6 calls through findOrReplace() from Elexis.
 		//So... we evaluate the patterns supplied from Elexis to decide whether we shall set Word to invisible or not :-)
 		//This is the 6th pattern that Elexis sends, so we're after the 6th pass through findOrReplace and switch Word back to visible :-)
-		if (pattern.equals("\\[SCRIPT:[^\\[]+\\]")) {
+		if (pattern == null)	System.out.println("MSWord_jsText: findOrReplace: WARNING: pattern IS NULL!");
+		else if (pattern.equals("\\[SCRIPT:[^\\[]+\\]")) {
 			//ToDo: Allenfalls wieder einschalten, wenn danach das MSWord Dokumentenwindow wieder nach vorne geholt werden kann: //20170201js commented out
 			System.out.println("MSWord_jsText: findOrReplace: FOLGENDER CODE COMMENTED OUT, DA WORD DABEI LEICHT HINTER ELEXIS RUTSCHT:");		
 			System.out.println("MSWord_jsText: findOrReplace: BITTE ERST DANN WIEDER EINFUEGEN, WENN WORD ANSCHLmusterIESSEND NACH VORNE GEHOLT WERDEN KANN.");		
@@ -6375,7 +6386,8 @@ System.out.println("MSWord_jsText: findOrReplace (SectionHeaders): *** ENDE DES 
 						else 				System.out.println("MSWord_jsText: insertText: orig="+orig);
 
 						//Replace the found text portion by "", hopefully maintaining the cursor position in the document
-				    	System.out.println("MSWord_jsText: insertText: text == "+text.toString());
+						if (text == null)	System.out.println("MSWord_jsText: insertText: ERROR: text IS NULL!");
+						else				System.out.println("MSWord_jsText: insertText: text == "+text.toString());
 						
 						//Text replacements adopted from insertAt() (continued) below,
 						//which are needed *there* to make MS Word understand incoming text from Elexis correctly

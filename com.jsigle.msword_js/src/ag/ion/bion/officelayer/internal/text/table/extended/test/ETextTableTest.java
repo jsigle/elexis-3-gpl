@@ -114,7 +114,7 @@ public class ETextTableTest extends TestCase {
 			}
 			catch (Exception excep) {
 				try {
-					docu.close();
+					if (docu != null) { docu.close(); }
 					officeApplication.deactivate();
 				}
 				catch(Exception e) {

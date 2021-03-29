@@ -249,11 +249,15 @@ public class DocumentLoader {
 
 	  DocumentService.checkMaxOpenDocuments(serviceProvider);
 	  System.out.println("DocumentLoader: loadDocument(6): xComponentLoader.loadComponentFromURL(4)...");
+	  
 	  if (URL==null)	System.out.println("DocumentLoader: URL==null");
-	  else 	  				System.out.println("DocumentLoader: URL="+URL.toString());
+	  else 	  			System.out.println("DocumentLoader: URL="+URL.toString());
+	  
 	  if (targetFrameName==null)	System.out.println("DocumentLoader: targetFrameName==null");
-	  else 	  				System.out.println("DocumentLoader: targetFrameName="+URL.toString());
+	  else 	  				System.out.println("DocumentLoader: targetFrameName="+targetFrameName.toString());
+	  
 	  System.out.println("DocumentLoader: searchFlags="+searchFlags);
+	  
 	  if (properties==null)	System.out.println("DocumentLoader: properties==null");
 	  else 	  				System.out.println("DocumentLoader: properties="+properties.toString());
  

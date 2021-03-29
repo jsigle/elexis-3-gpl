@@ -345,10 +345,19 @@ public class LoadDocumentOperation implements IRunnableWithProgress {
 						// url.toString(), documentDescriptor);
 
 						IDocumentService documentService = officeApplication.getDocumentService();
-						if (documentService == null)	System.out.println("LoadDocumentOperation: officeApplication.getDocumentService()==null");
-						else							System.out.println("LoadDocumentOperation: officeApplication.getDocumentService()="
-																			+ officeApplication.getDocumentService());
-						document = documentService.loadDocument(frame, url.toString(), documentDescriptor);
+						if (documentService == null) {
+							System.out.println("LoadDocumentOperation: officeApplication.getDocumentService()==null");
+							//TODO: 20210329js: What should we do with document in this case -
+							//if it is should not be null anymore (see above), but not receive a new value here either?
+							//Should we delete/dispose/otherwise-get-rid-of-it?
+							//Original code simply said document = documentService.loadDocument(frame, url.toString(), documentDescriptor);
+							//no matter whether documentService was null or not. This caused a "Potentiall null pointer access" warning/error.
+						} else { 
+							System.out.println("LoadDocumentOperation: officeApplication.getDocumentService()="
+									+ officeApplication.getDocumentService());
+						
+							document = documentService.loadDocument(frame, url.toString(), documentDescriptor);
+						}
 
 						System.out.println("LoadDocumentOperation: POST");
 

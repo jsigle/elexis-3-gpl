@@ -94,7 +94,7 @@ public class TextTableColumn implements ITextTableColumn {
         oldCellName = cellNames[i];
       }
     }
-    if(!cellRange.equals(oldCellName))
+    if ( (cellRange != null) && (!cellRange.equals(oldCellName)) )
       cellRange = cellRange + ":" + oldCellName;
     this.textTableCellRange = textTable.getCellRange(cellRange);
     this.index = index;
