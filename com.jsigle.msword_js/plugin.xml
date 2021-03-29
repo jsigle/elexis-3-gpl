@@ -9,7 +9,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="ag.ion.noa4e.internal.ui.preferences.LocalOfficeApplicationPreferencesPage"
+            class="com.jsigle.msword_js.PreferencePage"
             id="com.jsigle.msword_js"
             name="MSWord_js"/>
    </extension>

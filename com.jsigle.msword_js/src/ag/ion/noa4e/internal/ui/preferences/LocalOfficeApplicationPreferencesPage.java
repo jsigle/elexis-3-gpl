@@ -1,6 +1,8 @@
 /****************************************************************************
  *                                                                          *
- * NOA (Nice Office Access)                                     						*
+ * Adopted from NOA (Nice Office Access) as used in NOAText/_js/_jsl        *
+ * to the JACOB based MSWord_js during completion of the port               *
+ * pending removal of NOA remnants by jsigle - 20xx..2021                   *
  * ------------------------------------------------------------------------ *
  *                                                                          *
  * The Contents of this file are made available subject to                  *
@@ -113,7 +115,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
    */
   public void init(IWorkbench workbench) {
 	  System.out.println("LOAPP: init");
-		  setDescription(Messages.LocalOfficeApplicationPreferencesPage_description_configure_application);
+		  setDescription(Messages.MSWord_jsPreferencesPage_description_configure_application);
   }
 
   //----------------------------------------------------------------------------
@@ -138,7 +140,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
     composite.setLayout(gridLayout);
 
     Label labelHome = formToolkit.createLabel(composite,
-        Messages.LocalOfficeApplicationPreferencesPage_label_application_home);
+        Messages.MSWord_jsPreferencesPage_label_application_home);
     labelHome.setBackground(composite.getBackground());
 
     textHome = formToolkit.createText(composite, ""); //$NON-NLS-1$
@@ -148,7 +150,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
     textHome.setLayoutData(gridData);
 
     final Link linkDefine = new Link(composite, SWT.NONE);
-    linkDefine.setText("<a>" + Messages.LocalOfficeApplicationPreferencesPage_link_define_text + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    linkDefine.setText("<a>" + Messages.MSWord_jsPreferencesPage_link_define_text + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     linkDefine.addSelectionListener(new SelectionAdapter() {
       public void widgetSelected(SelectionEvent selectionEvent) {
     	System.out.println("LOAPP: createContents: widgetSelected: 1 start");
@@ -180,7 +182,7 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
     labelNull.setLayoutData(gridData);
 
     Label labelProperties = formToolkit.createLabel(composite,
-        Messages.LocalOfficeApplicationPreferencesPage_label_application_properties_text);
+        Messages.MSWord_jsPreferencesPage_label_application_properties_text);
     labelProperties.setBackground(composite.getBackground());
     labelProperties.setFont(JFaceResources.getFontRegistry().getBold(labelProperties.getFont().toString()));
     gridData = new GridData(SWT.FILL, SWT.NONE, true, false);
@@ -198,19 +200,19 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
     tableApplicationProperties.setLayout(tableLayout);
 
     TableColumn columnProduct = new TableColumn(tableApplicationProperties, SWT.NONE);
-    columnProduct.setText(Messages.LocalOfficeApplicationPreferencesPage_column_name_text);
+    columnProduct.setText(Messages.MSWord_jsPreferencesPage_column_name_text);
     int columnProductWidth = (int) (tableWidth * 0.4);
     columnProduct.setWidth(columnProductWidth);
 
     TableColumn columnHome = new TableColumn(tableApplicationProperties, SWT.NONE);
-    columnHome.setText(Messages.LocalOfficeApplicationPreferencesPage_column_value_text);
+    columnHome.setText(Messages.MSWord_jsPreferencesPage_column_value_text);
     columnHome.setWidth(tableWidth - columnProductWidth);
 
     tableApplicationProperties.setLinesVisible(true);
     tableApplicationProperties.setHeaderVisible(true);
 
     buttonPreventTermination = formToolkit.createButton(composite,
-        Messages.LocalOfficeApplicationPreferencesPage_prevent_termination_lable,
+        Messages.MSWord_jsPreferencesPage_prevent_termination_lable,
         SWT.CHECK);
     buttonPreventTermination.setBackground(composite.getBackground());
     gridData = new GridData();
@@ -264,8 +266,8 @@ public class LocalOfficeApplicationPreferencesPage extends PreferencePage implem
     if (oldPath.length() != 0 || !oldPath.equals(textHome.getText())) {
       if (EditorCorePlugin.getDefault().getManagedLocalOfficeApplication().isActive()) {
         if (MessageDialog.openQuestion(getShell(),
-            Messages.LocalOfficeApplicationPreferencesPage_dialog_restart_workbench_title,
-            Messages.LocalOfficeApplicationPreferencesPage_dialog_restart_workbench_message))
+            Messages.MSWord_jsPreferencesPage_dialog_restart_workbench_title,
+            Messages.MSWord_jsPreferencesPage_dialog_restart_workbench_message))
           NOAUIPlugin.getDefault().getWorkbench().restart();
       }
     }
