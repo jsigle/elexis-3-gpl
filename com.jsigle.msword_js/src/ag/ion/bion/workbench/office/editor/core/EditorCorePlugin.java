@@ -91,15 +91,23 @@ public class EditorCorePlugin extends Plugin {
     System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor just past super() begins...");
     System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor: about to plugin = this;");
 		plugin = this;
+
+	//20210329js: Trying to remove AgIon NOA related stuff from msword_js
+	//Auf den folgenden Abschnitt kann man verzichten, um das msword_js mit JACOB zu betreiben.
+	//Ich lasse es aber jetzt noch drin, weil ich doch nicht zu viel auf einmal ändern will.
+	//System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor: 20210329js: REMOVED portions referring to ag.ion.bion.workbench.office.editor.core.CorePluginResources");
+	/**/
 		try {
 		  System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor: try...");
 		  System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor: about to resourceBundle = ResourceBundle.getBundle(\"ag.ion.bion.workbench.office.editor.core.CorePluginResources\");");
 		  resourceBundle = ResourceBundle.getBundle("ag.ion.bion.workbench.office.editor.core.CorePluginResources");
 		} 
-    catch (MissingResourceException missingResourceException) {
-	  System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor: catching MissingRessourceException; about to resourceBundle = null;");
-      resourceBundle = null;
-    }
+    	catch (MissingResourceException missingResourceException) {
+	  	System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor: catching MissingRessourceException; about to resourceBundle = null;");
+      	resourceBundle = null;
+    	}
+	/**/
+	
 	System.out.println("com.jsigle.msword_js: EditorCorePlugin: EditorCorePlugin() constructor ends");
 	}
   //----------------------------------------------------------------------------
@@ -128,8 +136,14 @@ public class EditorCorePlugin extends Plugin {
     //ToDo: Oh well, it ALSO fails IF the two libraries are there. :-(
     
     //ToDo: For JaCoB to MS Word, we should rather look for the jacob native libraries (jacob-1.18-x86.dll and optionally jacob-1.18-x64.dll or more recent versions), if anything at all..
+
     
-    System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(BundleContext context): about to check the return value of: getLibrariesLocation() in advance...");
+	//20210329js: Trying to remove AgIon NOA related stuff from msword_js
+	//Auf den folgenden langen Abschnitt kann man tatsächlich verzichten, um das msword_js mit JACOB zu betreiben.
+    //Ich lasse es aber jetzt noch drin, weil ich doch nicht zu viel auf einmal ändern will.
+	//System.out.println("com.jsigle.msword_js: EditorCorePlugin.java start(BundleContext context): 20210329js: REMOVED portions referring to IOfficeApplication.NOA_NATIVE_LIB_PATH,getLibrariesLocation");
+	/**/
+	System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(BundleContext context): about to check the return value of: getLibrariesLocation() in advance...");
     String dummystring = getLibrariesLocation();
     if (dummystring  == null) { System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(): WARNING: getLibrariesLocation() has returned NULL!"); }
     else { System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(): getLibrariesLocation() has returned: "+dummystring ); }
@@ -161,20 +175,20 @@ public class EditorCorePlugin extends Plugin {
     System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(BundleContext context): ************************************************************************************************************");
     System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(BundleContext context):");     
     System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(BundleContext context): TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO");
-
-    /*
-    
+	    
     System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH,getLibrariesLocation());
     
     if (IOfficeApplication.NOA_NATIVE_LIB_PATH == null) { System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(): WARNING: IOfficeApplication.NOA_NATIVE_LIB_PATH IS NULL!"); }
     else { System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(): IOfficeApplication.NOA_NATIVE_LIB_PATH == "+IOfficeApplication.NOA_NATIVE_LIB_PATH ); }
-	*/
-
+	/**/
 
     /**
      * Workaround in order to integrate the OpenOffice.org window into a AWT frame
      * on Linux based systems. 
      */
+	//20210329js: Trying to remove AgIon NOA related stuff from msword_js
+	//Den folgenden Abschnitt braucht's auch für msword_js, sonst erscheint: Konnte Text nicht laden.
+	System.out.println("com.jsigle.msword_js: EditorCorePlugin.java start(BundleContext context): 20210329js: REMOVED portions referring to ag.ion.bion.workbench.office.editor.core.CorePluginResources");
     try {
       System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(): try...");
       System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start(): about to new Frame()");
@@ -183,6 +197,7 @@ public class EditorCorePlugin extends Plugin {
     catch(Throwable throwable) {
       //only occurs in headless mode, where it doesn't matter
     }
+    
     System.out.println("com.jsigle.msword_js: EditorCorePlugin.java: start() ends");
   }
   //----------------------------------------------------------------------------

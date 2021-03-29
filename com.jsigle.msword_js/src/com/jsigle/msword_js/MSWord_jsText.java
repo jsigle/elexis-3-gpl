@@ -2449,11 +2449,14 @@ END OF TESTCODE FOR INSERTING TEXTFRAME SHAPES*/
 		System.out.println("");
 		
 		
+		//20210329js removing agIon references
 		if (agIonPanel == null)	System.out.println("MSWord_jsText: createMe: WARNING: panel==null");
 		else 					System.out.println("MSWord_jsText: createMe: panel="+agIonPanel.toString());
 
+		//20210329js removing agIon references
 		agIonDoc = (ITextDocument) agIonPanel.getDocument();
 		
+		//20210329js removing agIon references
 		if (agIonDoc == null)	System.out.println("MSWord_jsText: createMe: WARNING: doc==null, so we won't be able to doc.addCloseListener() or noas.add(this).");
 		else 					System.out.println("MSWord_jsText: createMe: doc="+agIonDoc.toString());
 
@@ -2463,6 +2466,7 @@ END OF TESTCODE FOR INSERTING TEXTFRAME SHAPES*/
 		System.out.println("MSWord_jsText: createMe: ToDo: Provide a replacement for closeListener and noas-keeping-track-of-opened-documents for msword_js...");
 		System.out.println("MSWord_jsText: createMe: TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO");
 		
+		//20210329js removing agIon references
 		if (agIonDoc != null) {
 			System.out.println("MSWord_jsText: createMe: doc.addCloseListener()...");
 		
@@ -2475,6 +2479,7 @@ END OF TESTCODE FOR INSERTING TEXTFRAME SHAPES*/
 			if (agIonNoas != null)	System.out.println("MSWord_jsText: createMe: noas = "+agIonNoas.toString());
 			else					System.out.println("MSWord_jsText: createMe: WARNING: noas IS NULL, even though we should have added something.");
 		}
+		
 
 		
 		System.out.println("MSWord_jsText: createMe ends");
@@ -2627,17 +2632,28 @@ END OF TESTCODE FOR INSERTING TEXTFRAME SHAPES*/
 		System.out.println("MSWord_jsText: createContainer: About to TODO: THE FOLLOWING PROBABLY STILL USES OpenOffice, SHOULD USE MS Word instead!!!");
 
 		System.out.println("MSWord_jsText: createContainer: About to panel = new OfficePanel()...");
+		
+		//20210329js removing agIon references
+		//If this is removed, this function will currently return null and therefore,
+		//TextView.java createPartControl() which calls this method as textContainer = txt.getPlugin().createContainer(parent, new SaveHandler());
+		//will show an error dialog: "Das Textplugin konnte nicht korrekt geladen werden."
+		//NEVERTHELESS, the external msword window will appear and show an opened letter.
+		//I don't know (yet), whether Elexis needs to talk to the "panel" = result of createContainer in any way later on.
 		agIonPanel = new OfficePanel(parent, SWT.NONE);
 
+		//20210329js removing agIon references
 		if (agIonPanel == null)	System.out.println("MSWord_jsText: createContainer: WARNING: panel IS NULL!");
 		else 				System.out.println("MSWord_jsText: createContainer: panel="+agIonPanel.toString());
 		
+		//20210329js removing agIon references
 		agIonPanel.setBuildAlwaysNewFrames(false);
 		
 		System.out.println("MSWord_jsText: createContainer: About to office = EditorCorePlugin.getdefault().getmanagedLocalOfficeApplication()...");
 
+		//20210329js removing agIon references
 		agIonOffice = EditorCorePlugin.getDefault().getManagedLocalOfficeApplication();
 
+		//20210329js removing agIon references
 		if (agIonOffice == null)	System.out.println("MSWord_jsText: createContainer: WARNING: office IS NULL!");
 		else 				System.out.println("MSWord_jsText: createContainer: office="+agIonOffice.toString());
 		
