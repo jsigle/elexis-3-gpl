@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "com.jsigle.msword_js.messages";
+  	public static String MSWord_js_couldNotMakeTempFile;
     public static String Preferences_DEST_DIR;
     public static String Preferences_Rule;
     public static String Preferences_SRC_PATTERN;

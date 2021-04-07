@@ -178,6 +178,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -248,12 +250,18 @@ import com.jsigle.msword_js.MSWord_jsText.closeListener;
 
 import ch.elexis.core.ui.text.ITextPlugin;
 import ch.elexis.core.ui.util.SWTHelper;
+
+import com.jsigle.msword_js.Messages;
+import com.jsigle.msword_js.Preferences;
+import com.jsigle.msword_js.Utils;
+
 import ch.rgw.io.FileTool;
 import ch.rgw.tools.ExHandler;
 import ch.rgw.tools.Log;
 import ch.rgw.tools.StringTool;
 import ch.rgw.tools.TimeTool;
 import ch.elexis.core.data.interfaces.text.ReplaceCallback;
+
 /**
  * Submitted to the Jacob SourceForge web site as a sample 3/2005
  * <p>
@@ -7373,10 +7381,25 @@ System.out.println("MSWord_jsText: findOrReplace (SectionHeaders): *** ENDE DES 
 
 			
 			//201611131641js Umstellung von *.odt auf *.doc fÃ¼r MS-Word
+			
+			//MSWord_js version with simple, partially-randomly named temp files
 			System.out.println("MSWord_jsText: clean: about to myFile = File.createTempFile(\"MSWord_jsText\", \".doc\");");
 			myFile = File.createTempFile("MSWord_jsText", ".doc");
+			
+			//older version from NoaText / NoaText_js
 			//System.out.println("MSWord_jsText: clean: about to myFile = File.createTempFile(\"noa\", \".odt\");");
 			//myFile = File.createTempFile("noa", ".odt");
+
+			//TODO: 20210329js: Umstellung from stock randomp-portion-temporary to configurable informative filename:
+			//Das lasse ich jetzt weg, es ist doch zu komplex, weil eben NICHT jede TextDatei Bezug zu einem Patienten hat.
+			
+			//If NO filename is configured, this will automatically fall back to using File.createTempFile(...) as previously here.
+			//System.out.println("MSWord_jsText: clean: about to myFile = File.createTempFile(\"MSWord_jsText\", \".doc\");");
+			
+			//System.out.println("MSWord_jsText: clean: about to myFile = makeTempFile(\"*.doc\") providing a configurable filename, or,");
+			//System.out.println("MSWord_jsText: if nothing configured, calls myFile = File.createTempFile(\"MSWord_jsText\", \".doc\");");
+			//myFile = makeTempFile(".doc");
+
 
 			System.out.println("MSWord_jsText: clean: TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO");
 			System.out.println("MSWord_jsText: clean: TODO myFile.deleteOnExit(); commented out. Seems safer to do so.");
@@ -7627,4 +7650,125 @@ COMMENTED OUT */
 		// TODO Auto-generated method stub
 		
 	}
+	
+
+	
+	//Copied over from omnivore_js (whose new functionality has been assimilated to mainstream omnivore) DocHandle.java
+
+	//Here: Create a "talking" = informative temporary filename, put together
+	//from the building blocks specified on the Omnivore configuration page.
+
+	//CAVE: This method is NOT identical with the one in Omnivore DocHandle.
+	//First, it uses msword_js Preferences, NOT Omnivore Preferences.
+	//Second, if no special rules are configured,
+	//it falls back to calling File.createTempFile like this:
+	//temp = File.createTempFile("MSWord_jsText", ".doc"); //$NON-NLS-1$ //$NON-NLS-2$
+	//and not:
+	//temp = File.createTempFile("omni_", "_vore." + ext); //$NON-NLS-1$ //$NON-NLS-2$
+	//Third, the log.debug entries are naturally different,
+	//Fourth, the error message in case of problems is different,
+	//Fifth, not every TextDocument has a relation to a patient - whereas every OmnivoreDocument has.
+	//So, strictly speaking, it is misleading to use PatientID data for the temp filenames of all text dokuments.
+	//We need a way to decide when to leave the patient centered stuff away,
+	//and this information must be obtained from outside
+	//(or at least partially, by recognition of the caller from herein).
+	
+	//TODO: CHECK HOW THIS OVERLAPS WIH NIKLAUS MOVING createNiceFileName(DocHandle dh) to Utils Java!
+	
+	public File makeTempFile(String ext){
+			try {
+				System.out.println("makeTempFile() is about to make a temporary file with configurable filename...");
+				
+				if (ext == null) 	System.out.println("makeTempFile(): WARNING: provided ext IS NULL.");
+				else 				System.out.println("makeTempFile(): provided ext is: "+ext);
+
+				System.out.println("makeTempFile(): this.getClass() is: "+this.getClass().toString());
+				System.out.println("makeTempFile(): super.getClass() is: "+super.getClass().toString());
+				
+				//20130411js: Make the temporary filename configurable
+				StringBuffer configured_temp_filename=new StringBuffer();
+				
+				//TODO: Hier ist problematisch, dass NICHT jedes MSWord_js Dokument sich tatsächlich auf einen Patienten etc. bezieht -
+				//und auch nicht notwendigerweise auf den aktuell gerade angezeigten Patienten.
+				//D.H. dieser Methode hier müsste eigentlich wissen, we das MSWord_jsText gerade aufruft,
+				//um ein Dokument zu öffnen - ODER ob das zu einem Patienten gehört, und zu welchem Patienten.
+				//Sonst gibt es zwangsläufig Dokumente mit Temp-Dateinamen, die auf einen Patienten hinweisen,
+				//obwohl sie überhaupt nichts mit dem zu tun haben.
+				//Und diese Information hat eigentlich nur die Stelle, welche TextView aufruft!
+				//Insofern müsste 
+				
+				//20210329js: MSWord_jsText.java has used Gerrys older logger instead of Niklaus' preferred newer one.
+				//I refrain from updating the following statements for now, as the generation of temp files should work rather reliably by now.
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				System.out.println("Super.getClass() = " + super.getClass().toString());
+				configured_temp_filename.append(Utils.getTempFilenameElement("constant1",""));
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				//configured_temp_filename.append(Utils.getTempFilenameElement("PID",getPatient().getKuerzel()));	//getPatient() liefert in etwa: ch.elexis.com@1234567; getPatient().getId() eine DB-ID; getPatient().getKuerzel() die Patientennummer.
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				//configured_temp_filename.append(Utils.getTempFilenameElement("fn",getPatient().getName()));
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				//configured_temp_filename.append(Utils.getTempFilenameElement("gn",getPatient().getVorname()));
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				//configured_temp_filename.append(Utils.getTempFilenameElement("dob",getPatient().getGeburtsdatum()));
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+
+				//configured_temp_filename.append(Utils.getTempFilenameElement("dt",getTitle()));				//not more than 80 characters, laut javadoc
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				//configured_temp_filename.append(Utils.getTempFilenameElement("dk",getKeywords()));
+				//log.debug("msword_js.Text.java.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				//Da könnten auch noch Felder wie die Document Create Time etc. rein - siehe auch unten, die Methoden getPatient() etc.
+				
+				//configured_temp_filename.append(Utils.getTempFilenameElement("dguid",getGUID()));
+				//log.debug("DocHandle.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				
+				//N.B.: We may NOT REALLY assume for sure that another filename, derived from a createTempFile() result, where the random portion would be moved forward in the name, may also be guaranteed unique!
+				//So *if* we should use createTempFile() to obtain such a filename, we should put constant2 away from configured_temp_filename and put it in the portion provided with "ext", if a unique_temp_id was requested.
+				//And, we should probably not cut down the size of that portion, so it would be best to do nothing for that but offer a checkbox.
+				
+				//Es muss aber auch gar nicht mal unique sein - wenn die Datei schon existiert UND von einem anderen Prozess, z.B. Word, mit r/w geöffnet ist, erscheint ein sauberer Dialog mit einer Fehlermeldung. Wenn sie nicht benutzt wird, kann sie überschrieben werden.
+				
+				//Der Fall, dass hier auf einem Rechner / von einem User bei dem aus Daten erzeugten Filenamen zwei unterschiedliche Inhalte mit gleichem Namen im gleichen Tempdir gleichzeitig nur r/o geöffnet werden und einander in die Quere kommen, dürfte unwahrscheinlich sein.
+				//Wie wohl... vielleicht doch nicht. Wenn da jemand beim selben Patienten den Titel 2x einstellt nach: "Bericht Dr. Müller", und das dann den Filenamen liefert, ist wirklich alles gleich.
+				//So we should ... possibly really add some random portion; or use any other property of the file in that filename (recommendation: e.g. like in AnyQuest Server :-)  )
+				
+				//Ganz notfalls naoch ein Feld mit der Uhrzeit machen... oder die Temp-ID je nach eingestellten num_digits aus den clockticks speisen. Und das File mit try createn, notfalls wiederholen mit anderem clocktick - dann ist das so gut wie ein createTempFile().
+				//For now, I compute my own random portion - by creating a random BigInteger with a sufficient number of bits to represent  PreferencePage.nOmnivore_jsPREF_cotf_element_digits_max decimal digits.
+				//And I accept the low chance of getting an existing random part, i.e. I don't check the file is already there.
+				
+				SecureRandom random = new SecureRandom();
+				int  needed_bits = (int) Math.round(Math.ceil(Math.log(Preferences.nPreferences_cotf_element_digits_max)/Math.log(2)));
+				configured_temp_filename.append(Utils.getTempFilenameElement("random",new BigInteger(needed_bits , random).toString() ));
+				//log.debug("DocHandle.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				
+				configured_temp_filename.append(Utils.getTempFilenameElement("constant2",""));
+				//log.debug("DocHandle.makeTempFileString: configured_temp_filename = <{}>", configured_temp_filename.toString());
+				
+				File temp;
+				if (configured_temp_filename.length()>0) {
+					//The following file will have a unique variable part after the configured_temp_filename_and before the .ext,
+					//but will be located in the temporary directory.
+					File uniquetemp = File.createTempFile(configured_temp_filename.toString()+"_","."+ext); //$NON-NLS-1$ //$NON-NLS-2$
+					String temp_pathname=uniquetemp.getParent();
+					uniquetemp.delete(); 
+					
+					//remove the _unique variable part from the temporary filename and create a new file in the same directory as the previously automatically created unique temp file
+					//log.debug("DocHandle.makeTempFileString: temp_pathname = <{}>", temp_pathname);
+					//log.debug("DocHandle.makeTempFileString: configured_temp_filename.ext = <{}.{}>", configured_temp_filename , ext);
+					temp = new File(temp_pathname,configured_temp_filename+"."+ext);
+					temp.createNewFile();
+				}
+				else {
+					//if special rules for the filename are not configured, then generate it simply as before Omnivore_js Version 1.4.4
+					temp = File.createTempFile("MSWord_jsText", ".doc"); //$NON-NLS-1$ //$NON-NLS-2$
+					//temp = File.createTempFile("omni_", "_vore." + ext); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+				
+			return temp;	
+			} catch (Exception ex) {
+				ExHandler.handle(ex);
+				SWTHelper.showError(Messages.MSWord_js_couldNotMakeTempFile, ex.getMessage());
+				return null;
+			}
+		}
+
 }
